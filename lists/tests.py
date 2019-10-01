@@ -1,3 +1,5 @@
+import re
+
 from django.test import TestCase
 from django.urls import resolve
 from django.http import HttpRequest
@@ -15,5 +17,25 @@ class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()
         response = home_page(request)
-        expected_html = render_to_string('home.html') # use .decode() to convert the response.content bytes into a Python unicode string
-        self.assertEqual(response.content.decode(), expected_html)
+
+        # CSRF tokens don't get render_to_string'd
+        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
+        observed_html = re.sub(csrf_regex, '', response.content.decode())
+        expected_html = render_to_string('home.html')
+
+        self.assertEqual(observed_html, expected_html)
+
+    def test_home_page_can_save_a_POST_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new list item'
+        response = home_page(request)
+
+        # CSRF tokens don't get render_to_string'd
+        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
+        observed_html = re.sub(csrf_regex, '', response.content.decode())
+        expected_html = render_to_string(
+            'home.html',
+            {'new_item_text': 'A new list item'}
+        )
+        self.assertEqual(observed_html, expected_html)
