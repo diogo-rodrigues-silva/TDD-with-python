@@ -52,9 +52,9 @@ class NewVisitorTest(unittest.TestCase):
         # enter's "Use peacock feathers to make a fly" (Diogo is very methodical)
         self.fail('Finish the test!!!')
 
-    # The page updates again, and now shows both items an her list
+    # The page updates again, and now shows both items an his list
 
-    # Diogo wonders whethers the site will remember him list. Then he sees
+    # Diogo wonders whethers the site will remember his list. Then he sees
     # that the site has generated a unique URL for him -- there is some
     # explanatory text to that effect
 

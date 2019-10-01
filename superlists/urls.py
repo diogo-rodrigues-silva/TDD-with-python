@@ -18,6 +18,5 @@ from django.urls import path, re_path
 from lists.views import home_page
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     re_path(r'^$', home_page, name='home'),
 ]
